@@ -3,13 +3,13 @@
 ## Description of Workflow
 - This workflow builds a java app. with gradle, creates the docker image and then pushes it to my docker hub account. Lines 4-8 triggers the workflow on push to the main brain, 
 
-on:
+`on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]`
 
 - We then set permissions within the repo to read only, and build the application by specifying what its running on and installing a jdk.
 
-jobs:
+`jobs:
   build:
     runs-on: ubuntu-latest
     steps:
@@ -17,36 +17,36 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 17`
 
 - After building the image and installing a jdk (in our instance java), we run the command to build with execute commands and chmod, alongisde copying and renaming the jar file.
 
-name: Execute Gradle build
+`name: Execute Gradle build
         run: |
           chmod +x ./gradlew
           ./gradlew build
 name: Copy Jar file
-run: mv ./build/libs/`*`.jar ./app.jar
+run: mv ./build/libs/.jar ./app.jar`
 
 - Lastly we build and push the image using ubuntu, and login to to docker hub and commit to our dockerhub repo.
 
-build-image:
+`build-image:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/download-artifact@master
         with:
           name: job-dependencies
-          path: .
+          path: .`
 
- name: Login to Docker Hub
+` name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}`
 
-push: true
-          tags: dbrum12/brumbaugh-wopro-service:${{ github.sha }}
+`push: true
+          tags: dbrum12/brumbaugh-wopro-service:${{ github.sha }}`
 
 
 ## Link to DockerHub Repository
